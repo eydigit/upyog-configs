@@ -4,14 +4,11 @@ SearchDefinitions:
  version: 1.0.0
  definitions:
  - name: wateropensearch
-   decryptionPathId: waterOpenSearch
    query: 
     baseQuery: Select row_to_json(result) from
         (
-          select water.applicationtype, water.applicationno, water.connectionno, water.locality, water.createdtime, water.applicationstatus, water.status, water.property_id, owner.userid as uuid, u.name as name  from eg_ws_connection as water 
-          INNER JOIN eg_pt_property pt ON pt.propertyid = water.property_id
-          INNER JOIN eg_pt_owner owner ON owner.propertyid=pt.id
-          INNER JOIN eg_user as u on u.uuid = owner.userid $where
+          select water.applicationtype, water.applicationno, water.connectionno, water.locality, water.createdtime, water.applicationstatus, water.status, water.property_id from eg_ws_connection as water 
+          INNER JOIN eg_pt_property pt ON pt.propertyid = water.property_id $where
         ) result
     groupBy:    
     orderBy:
@@ -36,3 +33,9 @@ SearchDefinitions:
     - name: water.locality
       isMandatory: true
       jsonPath: $.searchCriteria.locality
+
+
+   output:
+    jsonFormat: {"ResponseInfo": {},"WaterConnection": []}
+    outJsonPath: $.WaterConnection
+    responseInfoPath: $.ResponseInfo
